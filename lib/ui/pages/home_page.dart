@@ -35,7 +35,6 @@ class SumWidget extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
                         onTap: () {
-                          print('click');
                           opController.reset();
                         },
                         child: const Icon(Icons.replay),
@@ -70,9 +69,12 @@ class SumWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  resultButton(opController, opController.vRta[0]),
-                  resultButton(opController, opController.vRta[1]),
-                  resultButton(opController, opController.vRta[2]),
+                  resultButton(
+                      opController, opController.vRta[0], const Key('0')),
+                  resultButton(
+                      opController, opController.vRta[1], const Key('1')),
+                  resultButton(
+                      opController, opController.vRta[2], const Key('2')),
                 ],
               )),
         )
@@ -80,11 +82,12 @@ class SumWidget extends StatelessWidget {
     );
   }
 
-  Widget resultButton(OpController opController, int value) {
+  Widget resultButton(OpController opController, int value, Key k) {
     return Expanded(
         child: Padding(
       padding: const EdgeInsets.all(8.0),
       child: ElevatedButton(
+          key: k,
           onPressed: () => opController.onResultClick(value),
           child: Text(value.toString(),
               style: const TextStyle(
