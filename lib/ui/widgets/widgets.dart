@@ -7,7 +7,6 @@ class OpWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(text);
     return Text(text,
         style: const TextStyle(
           fontSize: 40,

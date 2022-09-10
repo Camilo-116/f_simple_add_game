@@ -1,58 +1,18 @@
+import 'package:get/get.dart';
+import 'package:sum_game/ui/controllers/op_controller.dart';
+
 import '../widgets/widgets.dart';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-class SumWidget extends StatefulWidget {
+class SumWidget extends StatelessWidget {
   const SumWidget({Key? key}) : super(key: key);
 
   @override
-  State<SumWidget> createState() => _SumWidgetState();
-}
-
-class _SumWidgetState extends State<SumWidget> {
-  late int op1;
-  late int op2;
-  late int rta;
-  List<int> vectorRta = [];
-  int score = 0;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  void onResultClick(int value) {
-    if (value == rta) {
-      score = score + 1;
-    }
-    setState(() {});
-  }
-
-  void setValues() {
-    print("Set Values");
-    op1 = RandomInt.generate(max: 50);
-    op2 = RandomInt.generate(max: 50);
-
-    rta = op1 + op2;
-    vectorRta.clear();
-    vectorRta.add(rta);
-    vectorRta.add(rta + 1);
-    vectorRta.add(rta - 1);
-    vectorRta.shuffle();
-  }
-
-  void reset() {
-    setState(() {
-      score = 0;
-    });
-
-    setValues();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    setValues();
+    OpController opController = Get.find();
+    opController.setValues();
     return Column(
       children: [
         Expanded(
@@ -64,19 +24,19 @@ class _SumWidgetState extends State<SumWidget> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     const Spacer(flex: 1),
-                    Text(
-                      'Score: $score',
-                      style: const TextStyle(
-                        fontSize: 36,
-                      ),
-                    ),
+                    Obx(() => Text(
+                          'Score: ' + opController.score.toString(),
+                          style: const TextStyle(
+                            fontSize: 36,
+                          ),
+                        )),
                     const Spacer(flex: 1),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
                         onTap: () {
                           print('click');
-                          reset();
+                          opController.reset();
                         },
                         child: const Icon(Icons.replay),
                       ),
@@ -95,9 +55,9 @@ class _SumWidgetState extends State<SumWidget> {
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    OpWidget(text: op1.toString()),
+                    Obx(() => OpWidget(text: opController.op1.toString())),
                     const OpWidget(text: '+'),
-                    OpWidget(text: op2.toString()),
+                    Obx(() => OpWidget(text: opController.op2.toString())),
                     const OpWidget(text: '='),
                     const OpWidget(text: '?'),
                   ]),
@@ -106,26 +66,26 @@ class _SumWidgetState extends State<SumWidget> {
         ),
         Expanded(
           flex: 3,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              resultButton(vectorRta[0]),
-              resultButton(vectorRta[1]),
-              resultButton(vectorRta[2]),
-            ],
-          ),
+          child: Obx(() => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  resultButton(opController, opController.vRta[0]),
+                  resultButton(opController, opController.vRta[1]),
+                  resultButton(opController, opController.vRta[2]),
+                ],
+              )),
         )
       ],
     );
   }
 
-  Widget resultButton(int value) {
+  Widget resultButton(OpController opController, int value) {
     return Expanded(
         child: Padding(
       padding: const EdgeInsets.all(8.0),
       child: ElevatedButton(
-          onPressed: () => onResultClick(value),
+          onPressed: () => opController.onResultClick(value),
           child: Text(value.toString(),
               style: const TextStyle(
                 fontSize: 40,
