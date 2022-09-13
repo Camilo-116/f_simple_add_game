@@ -12,6 +12,7 @@ class OpController extends GetxController {
   int get score => _score.value;
   int get op1 => _op1.value;
   int get op2 => _op2.value;
+  int get rta => _rta;
   List<int> get vRta => _vectorRta;
 
   setValues() {

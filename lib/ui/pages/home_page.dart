@@ -87,9 +87,9 @@ class SumWidget extends StatelessWidget {
         child: Padding(
       padding: const EdgeInsets.all(8.0),
       child: ElevatedButton(
-          key: k,
           onPressed: () => opController.onResultClick(value),
           child: Text(value.toString(),
+              key: k,
               style: const TextStyle(
                 fontSize: 40,
               ))),
