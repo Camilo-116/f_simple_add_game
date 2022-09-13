@@ -8,11 +8,8 @@ import 'package:get/get.dart';
 import 'package:sum_game/ui/controllers/op_controller.dart';
 import 'package:sum_game/ui/pages/home_page.dart';
 
-import '../lib/ui/app.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sum_game/main.dart';
 
 void main() {
   setUp(() {
