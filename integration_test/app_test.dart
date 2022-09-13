@@ -1,30 +1,71 @@
 import 'package:get/get.dart';
+import 'package:integration_test/integration_test.dart';
+import 'package:sum_game/ui/app.dart';
 import 'package:sum_game/ui/controllers/op_controller.dart';
-
-import '../lib/ui/app.dart';
+import 'package:sum_game/ui/pages/home_page.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sum_game/main.dart';
 
 void main() {
-  setUp(() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  testWidgets('Integration test', (WidgetTester tester) async {
     Get.put(OpController());
-  });
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(MyApp());
+
+    await tester.pumpAndSettle();
 
     // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(find.text('Score: 0'), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    OpController opController = Get.find();
+    var rta = opController.rta;
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    //Find and tap the button with the right answer
+    await tester.tap(find.ancestor(
+        of: find.text(rta.toString()), matching: find.byType(ElevatedButton)));
+
+    await tester.pumpAndSettle();
+
+    //Verify that the score has increased
+    expect(find.text('Score: 1'), findsOneWidget);
+
+    //Find and tap the button with the wrong answer (+1)
+    await tester.tap(find.ancestor(
+        of: find.text((rta + 1).toString()),
+        matching: find.byType(ElevatedButton)));
+
+    await tester.pumpAndSettle();
+
+    //Verify that the score is still the same
+    expect(find.text('Score: 1'), findsOneWidget);
+
+    //Find and tap the button with the wrong answer (-1)
+    await tester.tap(find.ancestor(
+        of: find.text((rta - 1).toString()),
+        matching: find.byType(ElevatedButton)));
+
+    await tester.pumpAndSettle();
+
+    //Verify that the score is still the same
+    expect(find.text('Score: 1'), findsOneWidget);
+
+    //Find and tap the button with the right answer
+    await tester.tap(find.ancestor(
+        of: find.text(rta.toString()), matching: find.byType(ElevatedButton)));
+
+    await tester.pumpAndSettle();
+
+    //Verify that the score has increased
+    expect(find.text('Score: 2'), findsOneWidget);
+
+    //Find and tap the restart button
+    await tester.tap(find.byIcon(Icons.replay));
+
+    await tester.pumpAndSettle();
+
+    //Verify hat the score has been restarted
+    expect(find.text('Score: 0'), findsOneWidget);
   });
 }
