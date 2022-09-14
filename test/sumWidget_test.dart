@@ -27,11 +27,11 @@ void main() {
     expect(find.text('Score: 0'), findsOneWidget);
 
     OpController opController = Get.find();
-    var rta = opController.rta;
 
     //Find and tap the button with the right answer
     await tester.tap(find.ancestor(
-        of: find.text(rta.toString()), matching: find.byType(ElevatedButton)));
+        of: find.text(opController.rta.toString()),
+        matching: find.byType(ElevatedButton)));
 
     await tester.pumpAndSettle();
 
@@ -40,7 +40,7 @@ void main() {
 
     //Find and tap the button with the wrong answer (+1)
     await tester.tap(find.ancestor(
-        of: find.text((rta + 1).toString()),
+        of: find.text((opController.rta + 1).toString()),
         matching: find.byType(ElevatedButton)));
 
     await tester.pumpAndSettle();
@@ -50,7 +50,7 @@ void main() {
 
     //Find and tap the button with the wrong answer (-1)
     await tester.tap(find.ancestor(
-        of: find.text((rta - 1).toString()),
+        of: find.text((opController.rta - 1).toString()),
         matching: find.byType(ElevatedButton)));
 
     await tester.pumpAndSettle();
@@ -60,7 +60,8 @@ void main() {
 
     //Find and tap the button with the right answer
     await tester.tap(find.ancestor(
-        of: find.text(rta.toString()), matching: find.byType(ElevatedButton)));
+        of: find.text(opController.rta.toString()),
+        matching: find.byType(ElevatedButton)));
 
     await tester.pumpAndSettle();
 
